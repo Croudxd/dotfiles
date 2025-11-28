@@ -32,7 +32,25 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-one)
+(setq doom-theme 'gruvbox)
+
+;; Force solid backgrounds for UI elements
+;; (custom-set-faces
+;;  ;; Main buffer
+;;  '(default ((t (:background "#000000" :foreground "#ebdbb2"))))
+;;  ;; Mode line (bottom bar)
+;;  '(mode-line ((t (:background "#000000" :foreground "#ebdbb2" :box nil))))
+;;  '(mode-line-inactive ((t (:background "#000000" :foreground "#a89984" :box nil))))
+;;  ;; Line numbers
+;;  '(line-number ((t (:background "#000000" :foreground "#504945"))))
+;;  '(line-number-current-line ((t (:background "#1d2021" :foreground "#fabd2f" :weight bold))))
+;; )
+
+(defun my/doom-dashboard-bg ()
+  "Set a custom background for Doom dashboard only."
+  (face-remap-add-relative 'default '(:background "#000000"))) ;; pick your color
+
+(add-hook 'doom-dashboard-mode-hook #'my/doom-dashboard-bg)
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -80,3 +98,9 @@
 (setenv "PATH" (concat "/usr/local/go/bin:/home/ben/go/bin:" (getenv "PATH")))
 (setq exec-path (append '("/usr/local/go/bin" "/home/ben/go/bin") exec-path))
 (tab-bar-mode -1)
+
+;; Make only the background transparent, not the text
+
+
+;; Make only the background semi-transparent (text stays solid)
+;;(add-to-list 'default-frame-alist '(alpha-background . 60))
