@@ -1,0 +1,267 @@
+{
+  "main": {
+    "id": "36be6fd04ad06efe",
+    "type": "split",
+    "children": [
+      {
+        "id": "5c7011e6063e4c5f",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "64dfb42c81825d75",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Stack.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Stack"
+            }
+          },
+          {
+            "id": "c6d6f9095432609f",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Stack.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Stack"
+            }
+          },
+          {
+            "id": "cd2a527c0422e858",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Conventions.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Conventions"
+            }
+          },
+          {
+            "id": "37ecaf63247f740e",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Asm.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Asm"
+            }
+          }
+        ]
+      },
+      {
+        "id": "3ec1c8f2a91a7460",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "62099fabd8232a0d",
+            "type": "leaf",
+            "state": {
+              "type": "graph",
+              "state": {},
+              "icon": "lucide-git-fork",
+              "title": "Graph view"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "2bd9a4f3f09d3dcd",
+    "type": "split",
+    "children": [
+      {
+        "id": "a2f24d2741b59011",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "315c073ebd92e09b",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "c17d69a93ff9f349",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "8eb05205a1e1de4d",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "d6e7abba1ad98527",
+    "type": "split",
+    "children": [
+      {
+        "id": "f971e987914f41f7",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "b124853c491a06a8",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Conventions.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for Conventions"
+            }
+          },
+          {
+            "id": "549e3ef170d5b0f6",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Conventions.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from Conventions"
+            }
+          },
+          {
+            "id": "2e97a47ae0404ed3",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "736edcafd89538c3",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "All properties"
+            }
+          },
+          {
+            "id": "6a831a42eca9a9e8",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Conventions.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline of Conventions"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false
+    }
+  },
+  "active": "64dfb42c81825d75",
+  "lastOpenFiles": [
+    "Asm.md",
+    "Untitled.canvas",
+    "code/nested.o",
+    "code/nested",
+    "code/nestedo.o",
+    "code/nested.asm",
+    "Conventions.md",
+    "code/add_two",
+    "code/add_two.o",
+    "code/addtwo.asm",
+    "code/test.c",
+    "code/test.asm",
+    "test.asm",
+    "Stack.md",
+    "Registers.md",
+    "Locals.md",
+    "ISA.md",
+    "CPU.md",
+    "ALU.md",
+    "Welcome.md"
+  ]
+}
