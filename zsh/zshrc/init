@@ -1,0 +1,41 @@
+#ZSH_THEME="robbyrussell"
+
+plugins=(
+  git
+  sudo
+  archlinux
+  zsh-autosuggestions
+  fast-syntax-highlighting
+  copyfile
+  copybuffer
+)
+
+HISTFILE=~/.zsh_history
+HISTSIZE=10000
+SAVEHIST=10000
+setopt appendhistory
+
+autoload -Uz compinit
+compinit
+
+setopt MENU_COMPLETE
+zstyle ':completion:*:*:z:*' menu select
+
+source $ZSH/oh-my-zsh.sh
+
+if command -v starship &>/dev/null; then
+  eval "$(starship init zsh)"
+fi
+
+if command -v zoxide &>/dev/null; then
+  eval "$(zoxide init zsh)"
+fi
+
+if command -v fzf &>/dev/null; then
+  source <(fzf --zsh)
+fi
+# Allow Tab to cycle through the menu
+setopt MENU_COMPLETE
+
+# Optional: Enable the visual menu so you can see what you're cycling
+zstyle ':completion:*' menu select

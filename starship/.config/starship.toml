@@ -1,0 +1,31 @@
+# 1. layout: Keep everything on one line
+format = "$directory$git_branch$git_status$python$virtualenv$character"
+
+# 2. Global: Don't insert blank lines between commands
+add_newline = false
+
+# 3. Directory: Bold white, truncated if too long
+[directory]
+style = "bold white"
+format = "[$path]($style) "
+truncation_length = 3
+truncation_symbol = "…/"
+
+# 4. Git: Grey text, only shows symbol and branch name
+[git_branch]
+symbol = " "
+style = "white"
+format = "[$symbol$branch]($style) "
+
+[git_status]
+style = "white"
+format = "[$all_status$ahead_behind]($style) "
+
+# 6. Python: Only show version if you really need it (optional)
+[python]
+disabled = true 
+
+# 7. The Prompt Character
+[character]
+success_symbol = "[❯](bold white)"
+error_symbol = "[❯](bold red)" # The only color is red for errors

@@ -1,0 +1,155 @@
+tnew() {
+  local session_name=$(basename "$PWD" | tr '.' '_')
+  tmux has-session -t "$session_name" 2>/dev/null
+
+  if [ $? != 0 ]; then
+    tmux new-session -d -s "$session_name"
+    echo "Created new session: $session_name"
+  fi
+
+  if [ -z "$TMUX" ]; then
+    tmux attach-session -t "$session_name"
+  else
+    tmux switch-client -t "$session_name"
+  fi
+}
+tsw() {
+  local session
+  session=$(tmux list-sessions -F "#{session_name}" | fzf --height 40% --reverse --query="$1" --select-1 --exit-0)
+  
+  if [ -n "$session" ]; then
+    if [ -z "$TMUX" ]; then
+      tmux attach-session -t "$session"
+    else
+      tmux switch-client -t "$session"
+    fi
+  fi
+}
+
+rr() {
+    # 1. Overwrite main.cpp with the template
+    cat << 'EOF' > main.cpp
+#include <cctype>
+#include <cmath>
+#include <ranges>
+#include <string_view>
+#include <sstream>
+#include <iostream>
+#include <numeric>
+#include <unordered_map>
+#include <vector>
+#include <algorithm>
+#include <string>
+
+using namespace std;
+
+typedef long long ll;
+
+void solve()
+{
+
+}
+
+int main() {
+    #ifndef ONLINE_JUDGE
+        freopen("input.txt", "r", stdin);
+    #endif
+
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
+    int t; cin >> t; while(t--)
+        solve();
+
+    return 0;
+}
+EOF
+
+    rm -f input.txt output.txt
+    touch input.txt output.txt
+
+    print -P "%F{green}Reset complete:%f main.cpp initialized, input/output cleared."
+}
+rc() {
+    # Define filenames
+    local expected="output.txt"
+    local actual="temp_output.txt"
+
+    # 1. Compile
+    # We do NOT use -D ONLINE_JUDGE here so your freopen works locally
+    if g++ -O2 -std=c++17 main.cpp -o solution; then
+        
+        # 2. Run
+        # We direct stdout to a temp file to capture it.
+        # We don't need '< input.txt' because your code does that internally.
+        ./solution > "$actual"
+        
+        # 3. Compare
+        # -w ignores whitespace, -B ignores blank lines
+        if diff -w -B "$expected" "$actual" > /dev/null; then
+            print -P "%F{green}PASSED%f"
+            rm "$actual"
+        else
+            print -P "%F{red}FAILED%f"
+            
+            echo "\n--- Diff (Expected vs Actual) ---"
+            # -u provides a "Unified" diff which is easier to read
+            # Lines with '-' are what was expected but missing
+            # Lines with '+' are what your code outputted incorrectly
+            diff --color=always -w -B -u "$expected" "$actual"
+            
+            echo "\n--- Your Full Output ---"
+            cat "$actual"
+            
+            rm "$actual"
+        fi
+    else
+        print -P "%F{red}COMPILATION ERROR%f"
+    fi
+}
+zi() {
+  cd "$(zoxide query -i)"
+}
+
+zd() {
+  if [ $# -eq 0 ]; then
+    builtin cd ~ && return
+  elif [ -d "$1" ]; then
+    builtin cd "$1"
+  else
+    z "$@" && printf "\U000F17A9 " && pwd
+  fi
+}
+
+open() {
+  xdg-open "$@" >/dev/null 2>&1 &
+}
+
+cp2c() {
+  if [[ -z "$1" ]]; then
+    echo "Usage: cp2c <file>" >&2
+    return 1
+  fi
+
+  wl-copy < "$1"
+}
+
+c2f() {
+  if [[ -z "$1" ]]; then
+    echo "Usage: create-from-clip <filename>" >&2
+    return 1
+  fi
+  wl-paste > "$1"
+}
+repo() {
+  # Extract the URL from git config
+  URL=$(git config --get remote.origin.url | sed 's/git@github.com:/https:\/\/github.com\//' | sed 's/\.git$//')
+  
+  if [ -z "$URL" ]; then
+    echo "No GitHub remote found."
+  else
+    # Launch thorium-browser-avx2 specifically
+    # Using 'disown' lets you close the terminal without closing the browser
+    thorium-browser-avx2 "$URL" > /dev/null 2>&1 & disown
+  fi
+}
