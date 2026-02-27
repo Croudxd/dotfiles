@@ -5,12 +5,8 @@ return {
     dependencies = {
       "williamboman/mason.nvim",
       "williamboman/mason-lspconfig.nvim",
-      "hrsh7th/cmp-nvim-lsp",
     },
     config = function()
-      -- This is the modern way to bridge cmp and lspconfig
-      local capabilities = require("cmp_nvim_lsp").default_capabilities()
-      
       local lspconfig = require("lspconfig")
       
       -- Setup Mason

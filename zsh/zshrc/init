@@ -37,5 +37,8 @@ fi
 # Allow Tab to cycle through the menu
 setopt MENU_COMPLETE
 
+eval "$(ssh-agent -s)" &>/dev/null
+ssh-add ~/.ssh/github &>/dev/null
+
 # Optional: Enable the visual menu so you can see what you're cycling
 zstyle ':completion:*' menu select
