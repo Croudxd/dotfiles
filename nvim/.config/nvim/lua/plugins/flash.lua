@@ -3,29 +3,30 @@ return {
   event = "VeryLazy",
   opts = {
     search = {
-      -- This makes "fzy" match "fuzzy"
+      -- This makes "fzy" match "fuzzy" globally for Flash
       mode = "fuzzy",
       ignorecase = true,
     },
     modes = {
-      -- This ensures that when you use Flash as an operator (like after 'y')
-      -- it behaves exactly like the jump mode
       char = {
-      enabled = true,
-      jump_labels = true,
-      multi_line = true,
+        enabled = true,
+        jump_labels = true,
+        multi_line = true,
       },
       remote = {
+        enabled = true,
+      },
+      -- NEW: This turns Neovim's native / and ? into a Flash fuzzy search
+      search = {
         enabled = true,
       }
     }
   },
   keys = {
-    -- 1. Normal Jump: Press Enter, type 'fzy', see labels, press label to jump
+    -- 1. Normal Jump (Viewport restricted, fast)
     { "<CR>", mode = { "n", "x" }, function() require("flash").jump() end, desc = "Flash Jump" },
 
-    -- 2. Remote Operator: Press 'yi', then 'Enter', type 'fzy', press label to yank
-    -- This specific 'o' mode mapping enables the "yank from a distance" behavior
+    -- 2. Remote Operator
     { "<CR>", mode = { "o" }, function() require("flash").remote() end, desc = "Remote Flash" },
     { "<S-CR>", mode = { "o", "x" }, function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
   },

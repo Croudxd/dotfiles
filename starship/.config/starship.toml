@@ -1,5 +1,5 @@
 # 1. layout: Keep everything on one line
-format = "$directory$git_branch$git_status$python$virtualenv$character"
+format = "$directory$git_branch$git_status$character"
 
 # 2. Global: Don't insert blank lines between commands
 add_newline = false
@@ -21,9 +21,6 @@ format = "[$symbol$branch]($style) "
 style = "white"
 format = "[$all_status$ahead_behind]($style) "
 
-# 6. Python: Only show version if you really need it (optional)
-[python]
-disabled = true 
 
 # 7. The Prompt Character
 [character]
