@@ -145,6 +145,7 @@ bar {
 exec_always feh --bg-fill ~/.wallpaper.png
 exec_always picom &
 exec_always dunst &
+exec_always xrandr --output HDMI-1 --auto --right-of eDP-1
 
 bindsym XF86AudioRaiseVolume exec --no-startup-id ~/.config/i3/scripts/vol_bright.sh up volume
 bindsym XF86AudioLowerVolume exec --no-startup-id ~/.config/i3/scripts/vol_bright.sh down volume

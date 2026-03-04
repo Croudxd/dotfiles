@@ -64,5 +64,6 @@ end
 vim.opt.rtp:prepend(lazypath)
 vim.lsp.set_log_level("error")
 
+
 require("lazy").setup("plugins")
 vim.lsp.enable({})
