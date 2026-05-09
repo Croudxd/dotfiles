@@ -1,3 +1,7 @@
+cb() {
+    ("$@") 2>&1 | xclip -selection clipboard
+}
+
 tnew() {
   local session_name=$(basename "$PWD" | tr '.' '_')
   tmux has-session -t "$session_name" 2>/dev/null

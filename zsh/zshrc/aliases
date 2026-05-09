@@ -8,7 +8,10 @@ alias ff='sudo fd -HI -a --exclude .snapshots'
 alias is='fzf --preview="bat --style=numbers --color=always {}"'
 alias nis='nvim $(fzf --preview="bat --color=always {}")'
 alias vim='nvim'
+alias clipboard='2>&1 | xclip -selection clipboard'
 
+# If using wl-copy
+alias tocb='2>&1 | wl-copy'
 # Directories
 alias ..='cd ..'
 alias ...='cd ../..'

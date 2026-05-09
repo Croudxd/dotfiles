@@ -12,7 +12,7 @@ return {
       -- Setup Mason
       require("mason").setup()
       require("mason-lspconfig").setup({
-        ensure_installed = { "clangd", "lua_ls" },
+        ensure_installed = { "clangd", "lua_ls", "jdtls" },
         handlers = {
           -- Default handler for all installed servers
           function(server_name)
@@ -36,6 +36,15 @@ return {
               },
             })
           end,
+        ["jdtls"] = function()
+          lspconfig.jdtls.setup({
+            capabilities = capabilities,
+            cmd = {
+              "jdtls",
+              "--data", vim.fn.expand("~/.cache/jdtls/") .. vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t"),
+            },
+          })
+        end,
         },
       })
 

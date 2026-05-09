@@ -1,5 +1,5 @@
 # i3 config file (v4)
-set $mod Mod4
+set $mod Mod1
 
 for_window [class="^.*"] border pixel 0
 new_window none
@@ -19,6 +19,7 @@ hide_edge_borders both
 exec --no-startup-id dex --autostart --environment i3
 exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
 exec --no-startup-id nm-applet
+exec --no-startup-id export XDG_CURRENT_DESKTOP=gnome
 
 
 floating_modifier $mod
@@ -132,7 +133,6 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
-# --- BAR SETTINGS ---
 bar {
         position bottom 
         status_command i3status
@@ -146,6 +146,7 @@ exec_always feh --bg-fill ~/.wallpaper.png
 exec_always picom &
 exec_always dunst &
 exec_always xrandr --output HDMI-1 --auto --right-of eDP-1
+exec --no-startup-id ~/.config/i3/startup.sh
 
 bindsym XF86AudioRaiseVolume exec --no-startup-id ~/.config/i3/scripts/vol_bright.sh up volume
 bindsym XF86AudioLowerVolume exec --no-startup-id ~/.config/i3/scripts/vol_bright.sh down volume
