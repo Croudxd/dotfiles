@@ -6,30 +6,30 @@ return {
     local builtin = require('telescope.builtin')
     local themes = require('telescope.themes')
 
-    local function set_white_borders()
-      local highlights = {
-        TelescopeBorder         = { fg = "#ffffff" },
-        TelescopePromptBorder   = { fg = "#ffffff" },
-        TelescopeResultsBorder  = { fg = "#ffffff" },
-        TelescopePreviewBorder  = { fg = "#ffffff" },
-        TelescopePromptTitle    = { fg = "#ffffff", bold = true },
-        TelescopeResultsTitle   = { fg = "#ffffff", bold = true },
-        TelescopePreviewTitle   = { fg = "#ffffff", bold = true },
-        TelescopePromptPrefix   = { fg = "#ffffff" },
-        TelescopeSelection      = { bg = "#333333", fg = "#ffffff", bold = true },
-      }
-      for group, opts in pairs(highlights) do
-        vim.api.nvim_set_hl(0, group, opts)
-      end
-    end
-
-    set_white_borders()
-
-    vim.api.nvim_create_autocmd("ColorScheme", {
-      callback = function()
-        set_white_borders()
-      end,
-    })
+    -- local function set_white_borders()
+    --   local highlights = {
+    --     TelescopeBorder         = { fg = "#ffffff" },
+    --     TelescopePromptBorder   = { fg = "#ffffff" },
+    --     TelescopeResultsBorder  = { fg = "#ffffff" },
+    --     TelescopePreviewBorder  = { fg = "#ffffff" },
+    --     TelescopePromptTitle    = { fg = "#ffffff", bold = true },
+    --     TelescopeResultsTitle   = { fg = "#ffffff", bold = true },
+    --     TelescopePreviewTitle   = { fg = "#ffffff", bold = true },
+    --     TelescopePromptPrefix   = { fg = "#ffffff" },
+    --     TelescopeSelection      = { bg = "#333333", fg = "#ffffff", bold = true },
+    --   }
+    --   for group, opts in pairs(highlights) do
+    --     vim.api.nvim_set_hl(0, group, opts)
+    --   end
+    -- end
+    --
+    -- set_white_borders()
+    --
+    -- vim.api.nvim_create_autocmd("ColorScheme", {
+    --   callback = function()
+    --     set_white_borders()
+    --   end,
+    -- })
 
     -- 4. Setup Telescope
     telescope.setup({

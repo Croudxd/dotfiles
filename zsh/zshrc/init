@@ -1,4 +1,6 @@
 #ZSH_THEME="robbyrussell"
+export XDG_CURRENT_DESKTOP=gnome
+export XDG_SESSION_TYPE=x11
 
 plugins=(
   git
@@ -42,3 +44,4 @@ ssh-add ~/.ssh/github &>/dev/null
 
 # Optional: Enable the visual menu so you can see what you're cycling
 zstyle ':completion:*' menu select
+export PATH="$HOME/.cargo/bin:$PATH"
