@@ -1,29 +1,15 @@
-#ZSH_THEME="robbyrussell"
-export XDG_CURRENT_DESKTOP=gnome
-export XDG_SESSION_TYPE=x11
-
-plugins=(
-  git
-  sudo
-  archlinux
-  zsh-autosuggestions
-  fast-syntax-highlighting
-  copyfile
-  copybuffer
-)
-
 HISTFILE=~/.zsh_history
 HISTSIZE=10000
 SAVEHIST=10000
+
 setopt appendhistory
+setopt MENU_COMPLETE
 
 autoload -Uz compinit
 compinit
 
-setopt MENU_COMPLETE
 zstyle ':completion:*:*:z:*' menu select
-
-source $ZSH/oh-my-zsh.sh
+zstyle ':completion:*' menu select
 
 if command -v starship &>/dev/null; then
   eval "$(starship init zsh)"
@@ -36,12 +22,5 @@ fi
 if command -v fzf &>/dev/null; then
   source <(fzf --zsh)
 fi
-# Allow Tab to cycle through the menu
-setopt MENU_COMPLETE
 
-eval "$(ssh-agent -s)" &>/dev/null
-ssh-add ~/.ssh/github &>/dev/null
-
-# Optional: Enable the visual menu so you can see what you're cycling
-zstyle ':completion:*' menu select
 export PATH="$HOME/.cargo/bin:$PATH"
