@@ -1,2 +1,2 @@
-source ~/zshrc/rc
+source ~/.zshrc.d/rc
 bindkey -v
