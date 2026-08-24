@@ -4,7 +4,11 @@
 -- Uses the Neovim 0.11+/0.12 native `vim.lsp.config` / `vim.lsp.enable` API.
 -- The previous version drove everything through mason-lspconfig's `handlers`
 -- table, which was removed in mason-lspconfig 2.x, so none of those handlers
--- had been running at all.
+-- had been running at all. Mason has since been dropped entirely; see the
+-- note above vim.lsp.enable below.
+--
+-- To add a language server: install the binary with the system package
+-- manager, then add its lspconfig name to the vim.lsp.enable list.
 return {
   {
     "neovim/nvim-lspconfig",
@@ -65,13 +69,16 @@ return {
         end,
       })
 
-      -- Servers that live OUTSIDE Mason have to be enabled by hand, because
-      -- mason-lspconfig only auto-enables what Mason itself installed.
-      -- Anything added to `ensure_installed` in mason.lua (lua_ls today) is
-      -- enabled automatically and must NOT be repeated here.
+      -- Every server is a binary supplied by the system, not by Mason. Mason
+      -- downloaded prebuilt FHS binaries (its rust-analyzer asks for
+      -- /lib64/ld-linux-x86-64.so.2), which is exactly what does not exist on
+      -- NixOS, so this list is the portable form: the names never change, only
+      -- how the binary is declared. `pacman -S x` today becomes an entry in
+      -- home.packages / environment.systemPackages later.
       vim.lsp.enable({
-        "clangd",         -- pacman
-        "rust_analyzer",  -- rustup
+        "clangd",         -- pacman: clang
+        "lua_ls",         -- pacman: lua-language-server
+        "rust_analyzer",  -- rustup (also pacman: rust-analyzer)
         "basedpyright",   -- uv tool install
         "ruff",           -- uv tool install
       })
