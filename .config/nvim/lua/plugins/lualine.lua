@@ -8,6 +8,25 @@ return {
         theme = "auto",
         component_separators = "",
         section_separators = "",
+        -- Default refreshes the whole statusline on every CursorMoved/CursorMovedI
+        -- at a 16ms (~60fps) throttle, which recomputes all components (including
+        -- git branch) on every single keystroke/cursor move. Drop that trigger and
+        -- rely on the timer refresh instead.
+        refresh = {
+          statusline = 250,
+          tabline = 1000,
+          winbar = 1000,
+          events = {
+            "WinEnter",
+            "BufEnter",
+            "BufWritePost",
+            "SessionLoadPost",
+            "FileChangedShellPost",
+            "VimResized",
+            "Filetype",
+            "ModeChanged",
+          },
+        },
       },
 
       sections = {

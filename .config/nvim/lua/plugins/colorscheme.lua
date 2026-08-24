@@ -1,3 +1,4 @@
+-- Comment added by Claude Code on 2026-08-05, continuing the IDE integration test series
 return {
 {
     "folke/tokyonight.nvim",
@@ -5,7 +6,7 @@ return {
     priority = 1000,
     opts = {},
     config = function()
-        vim.cmd.colorscheme("tokyonight")
+        vim.cmd.colorscheme("tokyonight-night")
     end,
 }
 -- {
@@ -83,8 +84,10 @@ return {
   --     vim.api.nvim_set_hl(0, "LineNr", { fg = "#444444" })               -- Muted line numbers
   --
   --     vim.api.nvim_set_hl(0, "VertSplit", { fg = "#222222", bg = "NONE" }) -- Darker splits
+  --     vim.api.nvim_set_hl(0, "Visual",  { bg = "#3a3d41", fg = "#ffffff" })
+  --     vim.api.nvim_set_hl(0, "Comment", { fg = "#858585" })
   --
   --     end
   -- },
-  --
+
 }

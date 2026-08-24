@@ -1,1 +1,7 @@
+# tmux plugins are cloned and managed by tpm, not tracked here.
+# They were previously committed as gitlinks with no .gitmodules, which
+# meant a fresh clone produced five empty directories and tpm never loaded.
+.config/tmux/plugins/
+
+# legacy stow-era path, kept ignored so leftovers don't get re-added
 tmux/.tmux/
