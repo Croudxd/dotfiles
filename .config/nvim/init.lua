@@ -42,6 +42,14 @@ vim.keymap.set("n", "<C-d>", "<C-d>zz", { desc = "Scroll half-page DOWN and cent
 vim.keymap.set("n", "<S-l>", ":bnext<CR>", { desc = "Next buffer" })
 vim.keymap.set("n", "<S-h>", ":bprevious<CR>", { desc = "Previous buffer" })
 
+-- Jump between conflict markers in an ordinary buffer. git-conflict.nvim used
+-- to provide this; diffview's own ]x/[x are buffer-local to its merge view.
+local conflict_pat = [[^\(<<<<<<<\|=======\|>>>>>>>\)]]
+vim.keymap.set("n", "]x", function() vim.fn.search(conflict_pat, "W") end,
+    { desc = "Next conflict marker" })
+vim.keymap.set("n", "[x", function() vim.fn.search(conflict_pat, "bW") end,
+    { desc = "Previous conflict marker" })
+
 vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { desc = "LSP declaration" })
 vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "LSP definition" })
 
