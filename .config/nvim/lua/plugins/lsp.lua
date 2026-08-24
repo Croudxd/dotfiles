@@ -22,8 +22,9 @@ return {
         capabilities = require("blink.cmp").get_lsp_capabilities({}, true),
       })
 
-      -- C++ — clangd is a distro package here (/usr/sbin/clangd), no Mason
-      -- install and no extra toolchain needed beyond the gcc/gdb already present.
+      -- C++ — clangd is resolved from PATH, so it works wherever the package
+      -- is declared (pacman: clang / nixpkgs: clang-tools). No absolute path
+      -- on purpose: hardcoding /usr/... would break on NixOS.
       vim.lsp.config("clangd", {
         cmd = {
           "clangd",
