@@ -1,6 +1,10 @@
+-- Edited by Claude Code to test the nvim IDE integration
+-- Second comment: diff tool is now set to auto — this one should appear in nvim
+-- Third comment: looks like the diff opened as a proposed view in nvim this time
+-- Fourth comment: added on 2026-08-05, continuing the IDE integration test series
+-- Fifth comment: added on 2026-08-05 to test the diff view in nvim
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
-
 vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.signcolumn = 'no'
@@ -11,6 +15,11 @@ vim.opt.expandtab = true
 vim.opt.cursorline = false
 vim.opt.clipboard = "unnamedplus"
 vim.opt.wrap = false
+vim.o.termguicolors = true
+
+vim.g.rocks_enabled = false
+
+vim.api.nvim_set_hl(0, "Visual", { bg = "#264f78", fg = "#ffffff" })
 
 vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
 vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
@@ -21,6 +30,11 @@ vim.keymap.set("n", "<C-S-h>", "<C-w>H", { desc = "Move window to the left" })
 vim.keymap.set("n", "<C-S-l>", "<C-w>L", { desc = "Move window to the right" })
 vim.keymap.set("n", "<C-S-j>", "<C-w>J", { desc = "Move window to the lower" })
 vim.keymap.set("n", "<C-S-k>", "<C-w>K", { desc = "Move window to the upper" })
+
+
+for _, d in ipairs({ 'h', 'j', 'k', 'l' }) do
+  vim.keymap.set('t', '<C-' .. d .. '>', '<C-\\><C-n><C-w>' .. d, { desc = 'Move focus out of terminal' })
+end
 
 vim.keymap.set("n", "<C-f>", "<C-u>zz", { desc = "Scroll half-page UP and center" })
 vim.keymap.set("n", "<C-d>", "<C-d>zz", { desc = "Scroll half-page DOWN and center" })
@@ -67,3 +81,4 @@ vim.lsp.set_log_level("error")
 
 require("lazy").setup("plugins")
 vim.lsp.enable({})
+

@@ -2,17 +2,9 @@ return {
     "mason-org/mason-lspconfig.nvim",
     opts = {
     ensure_installed = {
-        "lua_ls",
         "rust_analyzer",
-        "bashls",
-    },
-        handlers = {
-            tinymist = function()
-                require("lspconfig").tinymist.setup({
-                    filetypes = { "typst" },
-                })
-            end,
-        },
+        -- "clojure_lsp",
+    }
     },
     dependencies = {
         { "mason-org/mason.nvim", opts = {} },

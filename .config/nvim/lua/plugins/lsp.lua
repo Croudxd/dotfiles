@@ -12,7 +12,7 @@ return {
       -- Setup Mason
       require("mason").setup()
       require("mason-lspconfig").setup({
-        ensure_installed = { "clangd", "lua_ls", "jdtls" },
+        ensure_installed = { "lua_ls", "jdtls" },
         handlers = {
           -- Default handler for all installed servers
           function(server_name)
@@ -22,20 +22,6 @@ return {
           end,
           
           -- Targeted C++ Accuracy Setup
-          ["clangd"] = function()
-            lspconfig.clangd.setup({
-              capabilities = capabilities,
-              cmd = {
-                "clangd",
-                "--background-index",
-                "--clang-tidy",
-                "--header-insertion=iwyu",
-                "--completion-style=detailed",
-                "--function-arg-placeholders",
-                "--fallback-style=llvm",
-              },
-            })
-          end,
         ["jdtls"] = function()
           lspconfig.jdtls.setup({
             capabilities = capabilities,
