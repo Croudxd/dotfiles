@@ -47,9 +47,6 @@ Note that `clangd` ships in `clang` on Arch but in **`clang-tools`** on nixpkgs.
 
 | Tool | Used for | Arch | nixpkgs |
 | --- | --- | --- | --- |
-| lazygit | `<leader>gg` | `lazygit` | `lazygit` |
-| typst | `typst-preview.nvim` | `typst` | `typst` |
-| tinymist | Typst LSP | `tinymist` | `tinymist` |
 | just | Overseer `just` task provider | `just` | `just` |
 | win32yank | clipboard under WSL | not packaged | not packaged |
 
@@ -60,7 +57,7 @@ required:
 
 ```bash
 sudo pacman -S clang lua-language-server gdb ripgrep fd git curl gcc make yazi
-sudo pacman -S lazygit typst tinymist just   # optional
+sudo pacman -S just   # optional
 rustup component add rust-analyzer
 uv tool install ruff
 uv tool install basedpyright
@@ -89,9 +86,6 @@ programs.neovim = {
     ripgrep
     fd
     yazi
-    lazygit
-    typst
-    tinymist
     just
   ];
 };
@@ -105,7 +99,7 @@ them.
 
 ```bash
 for b in clangd lua-language-server rust-analyzer ruff basedpyright-langserver \
-         gdb rg fd yazi lazygit typst tinymist just; do
+         gdb rg fd yazi just; do
   command -v "$b" >/dev/null || echo "missing: $b"
 done
 ```
