@@ -65,13 +65,15 @@ return {
         end,
       })
 
-      -- Rust — rust_analyzer comes from rustup, defaults are fine.
+      -- Servers that live OUTSIDE Mason have to be enabled by hand, because
+      -- mason-lspconfig only auto-enables what Mason itself installed.
+      -- Anything added to `ensure_installed` in mason.lua (lua_ls today) is
+      -- enabled automatically and must NOT be repeated here.
       vim.lsp.enable({
-        "clangd",
-        "lua_ls",
-        "rust_analyzer",
-        "basedpyright",
-        "ruff",
+        "clangd",         -- pacman
+        "rust_analyzer",  -- rustup
+        "basedpyright",   -- uv tool install
+        "ruff",           -- uv tool install
       })
 
       vim.diagnostic.config({

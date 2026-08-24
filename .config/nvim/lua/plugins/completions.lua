@@ -2,7 +2,15 @@ return {
   {
     "saghen/blink.cmp",
     version = "*", -- Use a release tag to download pre-built binaries
-    dependencies = "L3MON4D3/LuaSnip",
+    dependencies = {
+      {
+        -- Builds the jsregexp native module, which LuaSnip needs for
+        -- variable/placeholder transformations in LSP snippets. Compiles with
+        -- the gcc + lua headers already on this machine; no new packages.
+        "L3MON4D3/LuaSnip",
+        build = "make install_jsregexp",
+      },
+    },
 
     ---@module 'blink.cmp'
     ---@type blink.cmp.Config
