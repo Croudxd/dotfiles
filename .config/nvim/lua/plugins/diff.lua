@@ -1,3 +1,14 @@
+-- Merge conflicts are handled by diffview rather than git-conflict.nvim, which
+-- was removed: it reads `vim.highlight.priorities` at module load and calls the
+-- old `vim.validate{table}` form, both deprecated, and both still present on
+-- its upstream default branch with no release that fixes them.
+--
+-- During a merge, `<leader>gd` (:DiffviewOpen) opens a 3-way conflict view.
+-- Inside it diffview already binds, per hunk:
+--   <leader>co / ct / cb / ca   choose ours / theirs / base / all
+--   <leader>cO / cT / cB / cA   same, for the whole file
+--   dx / dX                     delete the conflict region / all of them
+--   ]x / [x                     next / previous conflict
 return {
   {
     "sindrets/diffview.nvim",
