@@ -1,10 +1,6 @@
--- Edited by Claude Code to test the nvim IDE integration
--- Second comment: diff tool is now set to auto — this one should appear in nvim
--- Third comment: looks like the diff opened as a proposed view in nvim this time
--- Fourth comment: added on 2026-08-05, continuing the IDE integration test series
--- Fifth comment: added on 2026-08-05 to test the diff view in nvim
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
+
 vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.signcolumn = 'no'
@@ -15,11 +11,16 @@ vim.opt.expandtab = true
 vim.opt.cursorline = false
 vim.opt.clipboard = "unnamedplus"
 vim.opt.wrap = false
-vim.o.termguicolors = true
+vim.opt.termguicolors = true
 
-vim.g.rocks_enabled = false
-
-vim.api.nvim_set_hl(0, "Visual", { bg = "#264f78", fg = "#ffffff" })
+-- Remote-plugin providers. Nothing in this config is a Python/Ruby/Perl/Node
+-- *remote plugin*, so these only ever surface as :checkhealth warnings about
+-- missing pynvim / gems / npm packages. Disabling them is unrelated to running
+-- Node- or Python-based language servers, which don't use this mechanism.
+vim.g.loaded_python3_provider = 0
+vim.g.loaded_ruby_provider = 0
+vim.g.loaded_perl_provider = 0
+vim.g.loaded_node_provider = 0
 
 vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
 vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
@@ -31,7 +32,6 @@ vim.keymap.set("n", "<C-S-l>", "<C-w>L", { desc = "Move window to the right" })
 vim.keymap.set("n", "<C-S-j>", "<C-w>J", { desc = "Move window to the lower" })
 vim.keymap.set("n", "<C-S-k>", "<C-w>K", { desc = "Move window to the upper" })
 
-
 for _, d in ipairs({ 'h', 'j', 'k', 'l' }) do
   vim.keymap.set('t', '<C-' .. d .. '>', '<C-\\><C-n><C-w>' .. d, { desc = 'Move focus out of terminal' })
 end
@@ -42,15 +42,15 @@ vim.keymap.set("n", "<C-d>", "<C-d>zz", { desc = "Scroll half-page DOWN and cent
 vim.keymap.set("n", "<S-l>", ":bnext<CR>", { desc = "Next buffer" })
 vim.keymap.set("n", "<S-h>", ":bprevious<CR>", { desc = "Previous buffer" })
 
-vim.api.nvim_set_keymap("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<CR>", { noremap = true, silent = true })
-vim.api.nvim_set_keymap("n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>", { noremap = true, silent = true })
+vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { desc = "LSP declaration" })
+vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "LSP definition" })
 
 vim.keymap.set("n", "<leader>bd", function()
     require('mini.bufremove').delete(0, true)
     vim.cmd('bnext')
 end, { desc = "Delete buffer and move to the next" })
 
-vim.api.nvim_set_keymap('n', '<leader>c', ':cd ~/.config/nvim<CR>:e .<CR>', { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>c', ':cd ~/.config/nvim<CR>:e .<CR>', { silent = true, desc = "Open nvim config" })
 
 vim.api.nvim_create_autocmd('TextYankPost', {
     desc = 'Highlight when yanking (copying) text',
@@ -60,11 +60,20 @@ vim.api.nvim_create_autocmd('TextYankPost', {
     end,
 })
 
-vim.api.nvim_set_hl(0, "DiagnosticVirtualTextError", { fg = "#db4b4b", italic = true })
-vim.api.nvim_set_hl(0, "DiagnosticVirtualTextWarn", { fg = "#e0af68", italic = true })
+-- `:colorscheme` runs `hi clear`, which wipes any highlight set before it.
+-- These used to be assigned at the top of init.lua, so lazy.nvim loading the
+-- colorscheme below silently discarded them. Re-apply on every ColorScheme.
+vim.api.nvim_create_autocmd('ColorScheme', {
+    desc = 'Re-apply diagnostic highlight overrides after a colorscheme loads',
+    group = vim.api.nvim_create_augroup('diagnostic-hl', { clear = true }),
+    callback = function()
+        vim.api.nvim_set_hl(0, "DiagnosticVirtualTextError", { fg = "#db4b4b", italic = true })
+        vim.api.nvim_set_hl(0, "DiagnosticVirtualTextWarn", { fg = "#e0af68", italic = true })
+    end,
+})
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
+if not vim.uv.fs_stat(lazypath) then
     vim.fn.system({
         "git",
         "clone",
@@ -76,9 +85,10 @@ if not vim.loop.fs_stat(lazypath) then
 end
 
 vim.opt.rtp:prepend(lazypath)
-vim.lsp.set_log_level("error")
+vim.lsp.log.set_level(vim.log.levels.ERROR)
 
-
-require("lazy").setup("plugins")
-vim.lsp.enable({})
-
+require("lazy").setup("plugins", {
+    -- No plugin in this config needs luarocks. Without this, lazy.nvim tries to
+    -- bootstrap hererocks + Lua 5.1 and :checkhealth reports it as an error.
+    rocks = { enabled = false },
+})
