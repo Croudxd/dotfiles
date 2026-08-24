@@ -11,18 +11,21 @@ return {
       "neovim/nvim-lspconfig",
     },
     opts = {
-      -- clangd, rust-analyzer, ruff and basedpyright all exist outside Mason
-      -- already (distro packages, rustup, and `uv tool install`), so Mason only
-      -- has to supply lua_ls. Keeping the list this short also avoids Mason
-      -- trying to install anything that needs npm/pip/go, none of which are
-      -- present on this machine.
-      ensure_installed = { "lua_ls" },
+      -- ADD NEW LANGUAGE SERVERS HERE. One line is all it takes: Mason
+      -- installs it and `automatic_enable` below turns it on. Names are the
+      -- lspconfig ones (`:Mason` lists them, or `:h lspconfig-all`).
+      --
+      -- Not listed here on purpose: clangd, rust_analyzer, ruff and
+      -- basedpyright. Those already exist outside Mason (pacman, rustup and
+      -- `uv tool install`) and are enabled in lsp.lua, so letting Mason also
+      -- install them would just mean two copies to keep updated.
+      ensure_installed = {
+        "lua_ls",
+      },
 
-      -- Servers are enabled explicitly in lsp.lua instead. With the default
-      -- (`true`) mason-lspconfig enables *every* server it finds installed,
-      -- which meant a leftover jdtls package started a Java server on a machine
-      -- with no JDK.
-      automatic_enable = false,
+      -- Anything Mason installs gets enabled automatically, so adding a name
+      -- above is genuinely the only step.
+      automatic_enable = true,
     },
   },
 }

@@ -62,7 +62,26 @@ return {
     -- │ Overseer, UI, Signs, Keymaps                 │
     -- ╰──────────────────────────────────────────────╯
 
-    overseer.setup()
+    -- Only register the task providers that are actually usable here. Overseer
+    -- registers every builtin by default and its health check then reports one
+    -- warning per provider whose tool is missing (cargo-make, composer, deno,
+    -- devenv, mage, mise, rake, task, ...). cargo, just and make are kept.
+    overseer.setup({
+      disable_template_modules = {
+        "overseer.template.cargo-make",
+        "overseer.template.composer",
+        "overseer.template.deno",
+        "overseer.template.devenv",
+        "overseer.template.mage",
+        "overseer.template.mise",
+        "overseer.template.mix",
+        "overseer.template.npm",
+        "overseer.template.rake",
+        "overseer.template.task",
+        "overseer.template.tox",
+        "overseer.template.vscode",
+      },
+    })
 
     -- Add keymap to trigger Overseer build/run tasks
     vim.keymap.set(
