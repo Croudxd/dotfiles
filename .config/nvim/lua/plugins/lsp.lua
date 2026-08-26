@@ -62,6 +62,24 @@ return {
         },
       })
 
+      -- Rust — the `rust-analyzer` on $PATH is often rustup's proxy at
+      -- /usr/lib/rustup/bin/rust-analyzer, which forwards to whichever
+      -- toolchain the workspace's rust-toolchain.toml pins. That fails hard
+      -- (`error: Unknown binary 'rust-analyzer'`) whenever the pinned
+      -- toolchain doesn't include the rust-analyzer component. rust-analyzer
+      -- is forward-compatible with older Rust versions, so one binary works
+      -- across every workspace: prefer the stable toolchain's copy when
+      -- rustup is present, and otherwise fall back to $PATH (which is how
+      -- nixpkgs.rust-analyzer, pacman's rust-analyzer, etc. will show up).
+      local function rust_analyzer_cmd()
+        local stable = vim.fn.glob(
+          vim.fn.expand("~/.rustup/toolchains/stable-*/bin/rust-analyzer"),
+          true, true)
+        if stable[1] then return { stable[1] } end
+        return { "rust-analyzer" }
+      end
+      vim.lsp.config("rust_analyzer", { cmd = rust_analyzer_cmd() })
+
       vim.lsp.config("ruff", {
         on_attach = function(client)
           -- basedpyright already provides hover; ruff's is much thinner and
