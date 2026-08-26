@@ -78,7 +78,31 @@ return {
         if stable[1] then return { stable[1] } end
         return { "rust-analyzer" }
       end
-      vim.lsp.config("rust_analyzer", { cmd = rust_analyzer_cmd() })
+      vim.lsp.config("rust_analyzer", {
+        cmd = rust_analyzer_cmd(),
+        settings = {
+          ["rust-analyzer"] = {
+            cargo = {
+              -- Give rust-analyzer its own target directory so its cargo
+              -- check doesn't share fingerprints (or the target lock) with
+              -- interactive `cargo build`. Without this, every save either
+              -- invalidates the CLI build cache or blocks on it. `true`
+              -- resolves to `target/rust-analyzer/`.
+              targetDir = true,
+            },
+            check = {
+              -- Check only the current package on save. The default checks
+              -- the whole workspace, which on a 16-crate workspace turns
+              -- every save into a full graph re-check.
+              workspace = false,
+            },
+            -- Skip the upfront pass that eagerly indexes every crate in
+            -- the workspace before the editor becomes responsive. Indexes
+            -- are still built lazily as files are touched.
+            cachePriming = { enable = false },
+          },
+        },
+      })
 
       vim.lsp.config("ruff", {
         on_attach = function(client)
