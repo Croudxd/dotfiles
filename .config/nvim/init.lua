@@ -13,6 +13,11 @@ vim.opt.clipboard = "unnamedplus"
 vim.opt.wrap = false
 vim.opt.termguicolors = true
 
+-- Rounded border on every floating window (LSP hover, signature help,
+-- diagnostics float, blink.cmp docs). Needs Neovim 0.11+; this config
+-- already assumes 0.11 via `vim.lsp.config` in lua/plugins/lsp.lua.
+vim.o.winborder = "rounded"
+
 -- Remote-plugin providers. Nothing in this config is a Python/Ruby/Perl/Node
 -- *remote plugin*, so these only ever surface as :checkhealth warnings about
 -- missing pynvim / gems / npm packages. Disabling them is unrelated to running
