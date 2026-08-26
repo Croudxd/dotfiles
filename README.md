@@ -40,6 +40,7 @@ the `vim.lsp.enable` list in `.config/nvim/lua/plugins/lsp.lua`.
 | git, curl | lazy.nvim bootstrap and plugin fetch | `git`, `curl` | `git`, `curl` |
 | gcc, make | builds LuaSnip's `jsregexp` module | `gcc`, `make` | `gcc`, `gnumake` |
 | yazi | `yazi.nvim` file manager | `yazi` | `yazi` |
+| tree-sitter | `nvim-treesitter` (main branch) compiles parsers locally | `tree-sitter-cli` | `tree-sitter` |
 
 Note that `clangd` ships in `clang` on Arch but in **`clang-tools`** on nixpkgs.
 
@@ -56,7 +57,7 @@ Everything needed is in the official repositories, so no AUR helper is
 required:
 
 ```bash
-sudo pacman -S clang lua-language-server gdb ripgrep fd git curl gcc make yazi
+sudo pacman -S clang lua-language-server gdb ripgrep fd git curl gcc make yazi tree-sitter-cli
 sudo pacman -S just   # optional
 rustup component add rust-analyzer
 uv tool install ruff
@@ -87,6 +88,7 @@ programs.neovim = {
     fd
     yazi
     just
+    tree-sitter
   ];
 };
 ```
@@ -99,7 +101,7 @@ them.
 
 ```bash
 for b in clangd lua-language-server rust-analyzer ruff basedpyright-langserver \
-         gdb rg fd yazi just; do
+         gdb rg fd yazi just tree-sitter; do
   command -v "$b" >/dev/null || echo "missing: $b"
 done
 ```
