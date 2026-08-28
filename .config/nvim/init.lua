@@ -58,6 +58,17 @@ vim.keymap.set("n", "[x", function() vim.fn.search(conflict_pat, "bW") end,
 vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { desc = "LSP declaration" })
 vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "LSP definition" })
 
+-- `:Errors` opens the quickfix populated with every LSP error (severity 1).
+-- `:Diagnostics` widens it to everything the servers publish — warnings,
+-- hints, info too. Use `:cnext` / `:cprev` to walk the list, `<CR>` to jump.
+vim.api.nvim_create_user_command("Errors", function()
+    vim.diagnostic.setqflist({ open = true, severity = vim.diagnostic.severity.ERROR })
+end, { desc = "Open all LSP errors in the quickfix list" })
+
+vim.api.nvim_create_user_command("Diagnostics", function()
+    vim.diagnostic.setqflist({ open = true })
+end, { desc = "Open all LSP diagnostics in the quickfix list" })
+
 vim.keymap.set("n", "<leader>bd", function()
     require('mini.bufremove').delete(0, true)
     vim.cmd('bnext')
