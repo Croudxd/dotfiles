@@ -53,5 +53,9 @@ return {
     vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = 'Telescope find files' })
     vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = 'Telescope live grep' })
     vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = 'Telescope help tags' })
+    vim.keymap.set('n', '<leader>fd', builtin.diagnostics,
+      { desc = 'Telescope LSP diagnostics (all buffers)' })
+    vim.keymap.set('n', '<leader>fD', function() builtin.diagnostics({ bufnr = 0 }) end,
+      { desc = 'Telescope LSP diagnostics (current buffer)' })
   end,
 }
