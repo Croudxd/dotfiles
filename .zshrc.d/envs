@@ -5,3 +5,5 @@ export PATH=$PATH:$QHOME/l64
 export JAVA_HOME=/usr/lib/jvm/java-21-openjdk
 export PATH=$PATH:$JAVA_HOME/bin
 export SHELL="$(getent passwd "$USER" | cut -d: -f7)"
+export PATH="$HOME/.local/bin:$PATH"
+export SSH_AUTH_SOCK=/run/user/$(id -u)/ssh-agent'
