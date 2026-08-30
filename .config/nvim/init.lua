@@ -100,6 +100,14 @@ end
 vim.opt.rtp:prepend(lazypath)
 vim.lsp.log.set_level(vim.log.levels.ERROR)
 
+vim.api.nvim_create_user_command("Errors", function()
+    vim.diagnostic.setqflist({ open = true, severity = vim.diagnostic.severity.ERROR })
+end, { desc = "Open all LSP errors in the quickfix list" })
+
+vim.api.nvim_create_user_command("Diagnostics", function()
+    vim.diagnostic.setqflist({ open = true })
+end, { desc = "Open all LSP diagnostics in the quickfix list" })
+
 require("lazy").setup("plugins", {
     -- No plugin in this config needs luarocks. Without this, lazy.nvim tries to
     -- bootstrap hererocks + Lua 5.1 and :checkhealth reports it as an error.
