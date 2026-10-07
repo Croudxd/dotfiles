@@ -2,29 +2,45 @@
 -- in: C++, Python, Rust and Lua.
 --
 -- Uses the Neovim 0.11+/0.12 native `vim.lsp.config` / `vim.lsp.enable` API.
--- The previous version drove everything through mason-lspconfig's `handlers`
--- table, which was removed in mason-lspconfig 2.x, so none of those handlers
--- had been running at all. Mason has since been dropped entirely; see the
--- note above vim.lsp.enable below.
 --
--- To add a language server: install the binary with the system package
--- manager, then add its lspconfig name to the vim.lsp.enable list.
+-- To add a language server:
+--   1. Install the binary using the system/toolchain package manager.
+--   2. Add its lspconfig name to the vim.lsp.enable list below.
+--
+-- Mason is intentionally not used for LSP binaries here. This keeps the
+-- configuration portable between normal Linux distributions and NixOS.
 return {
   {
     "neovim/nvim-lspconfig",
-    event = { "BufReadPre", "BufNewFile" },
-    dependencies = { "saghen/blink.cmp" },
+
+    event = {
+      "BufReadPre",
+      "BufNewFile",
+    },
+
+    dependencies = {
+      "saghen/blink.cmp",
+    },
+
     config = function()
-      -- Advertise blink.cmp's completion capabilities to every server. The old
-      -- config passed `capabilities = capabilities`, referring to a global that
-      -- was never defined, so every server silently received nil.
+      ------------------------------------------------------------------------
+      -- Global LSP configuration
+      ------------------------------------------------------------------------
+
+      -- Advertise blink.cmp's completion capabilities to every language
+      -- server.
       vim.lsp.config("*", {
         capabilities = require("blink.cmp").get_lsp_capabilities({}, true),
       })
 
-      -- C++ — clangd is resolved from PATH, so it works wherever the package
-      -- is declared (pacman: clang / nixpkgs: clang-tools). No absolute path
-      -- on purpose: hardcoding /usr/... would break on NixOS.
+      ------------------------------------------------------------------------
+      -- C++
+      ------------------------------------------------------------------------
+
+      -- clangd is resolved from PATH.
+      --
+      -- This deliberately avoids hard-coded paths so the same configuration
+      -- works whether clangd comes from pacman, apt, nixpkgs, etc.
       vim.lsp.config("clangd", {
         cmd = {
           "clangd",
@@ -37,102 +53,187 @@ return {
         },
       })
 
-      -- Lua — installed by Mason (single self-contained binary, no runtime).
+      ------------------------------------------------------------------------
+      -- Lua
+      ------------------------------------------------------------------------
+
       vim.lsp.config("lua_ls", {
         settings = {
           Lua = {
-            runtime = { version = "LuaJIT" },
-            workspace = { checkThirdParty = false },
-            diagnostics = { globals = { "vim" } },
-            telemetry = { enable = false },
+            runtime = {
+              version = "LuaJIT",
+            },
+
+            workspace = {
+              checkThirdParty = false,
+            },
+
+            diagnostics = {
+              globals = {
+                "vim",
+              },
+            },
+
+            telemetry = {
+              enable = false,
+            },
           },
         },
       })
 
-      -- Python — basedpyright owns types/navigation, ruff owns lint+format.
-      -- Both come from `uv tool install`, so no pip and no system Node.
+      ------------------------------------------------------------------------
+      -- Python
+      ------------------------------------------------------------------------
+
+      -- basedpyright owns type checking, completion, hover and navigation.
       vim.lsp.config("basedpyright", {
         settings = {
           basedpyright = {
             analysis = {
               typeCheckingMode = "standard",
+
+              -- Only analyse files currently open in the editor instead of
+              -- eagerly reporting diagnostics for the whole project.
               diagnosticMode = "openFilesOnly",
             },
           },
         },
       })
 
-      -- Rust — the `rust-analyzer` on $PATH is often rustup's proxy at
-      -- /usr/lib/rustup/bin/rust-analyzer, which forwards to whichever
-      -- toolchain the workspace's rust-toolchain.toml pins. That fails hard
-      -- (`error: Unknown binary 'rust-analyzer'`) whenever the pinned
-      -- toolchain doesn't include the rust-analyzer component. rust-analyzer
-      -- is forward-compatible with older Rust versions, so one binary works
-      -- across every workspace: prefer the stable toolchain's copy when
-      -- rustup is present, and otherwise fall back to $PATH (which is how
-      -- nixpkgs.rust-analyzer, pacman's rust-analyzer, etc. will show up).
-      local function rust_analyzer_cmd()
-        local stable = vim.fn.glob(
-          vim.fn.expand("~/.rustup/toolchains/stable-*/bin/rust-analyzer"),
-          true, true)
-        if stable[1] then return { stable[1] } end
-        return { "rust-analyzer" }
-      end
-      vim.lsp.config("rust_analyzer", {
-        cmd = rust_analyzer_cmd(),
-        settings = {
-          ["rust-analyzer"] = {
-            cargo = {
-              -- Give rust-analyzer its own target directory so its cargo
-              -- check doesn't share fingerprints (or the target lock) with
-              -- interactive `cargo build`. Without this, every save either
-              -- invalidates the CLI build cache or blocks on it. `true`
-              -- resolves to `target/rust-analyzer/`.
-              targetDir = true,
-            },
-            check = {
-              -- Check only the current package on save. The default checks
-              -- the whole workspace, which on a 16-crate workspace turns
-              -- every save into a full graph re-check.
-              workspace = false,
-            },
-            -- Skip the upfront pass that eagerly indexes every crate in
-            -- the workspace before the editor becomes responsive. Indexes
-            -- are still built lazily as files are touched.
-            cachePriming = { enable = false },
-          },
-        },
-      })
-
+      -- Ruff owns linting/formatting.
       vim.lsp.config("ruff", {
         on_attach = function(client)
-          -- basedpyright already provides hover; ruff's is much thinner and
-          -- the two otherwise fight over the same position.
+          -- basedpyright already provides proper Python hover information.
+          -- Disable Ruff's hover provider so the two servers do not compete
+          -- for the same request.
           client.server_capabilities.hoverProvider = false
         end,
       })
 
-      -- Every server is a binary supplied by the system, not by Mason. Mason
-      -- downloaded prebuilt FHS binaries (its rust-analyzer asks for
-      -- /lib64/ld-linux-x86-64.so.2), which is exactly what does not exist on
-      -- NixOS, so this list is the portable form: the names never change, only
-      -- how the binary is declared. `pacman -S x` today becomes an entry in
-      -- home.packages / environment.systemPackages later.
-      vim.lsp.enable({
-        "clangd",         -- pacman: clang
-        "lua_ls",         -- pacman: lua-language-server
-        "rust_analyzer",  -- rustup (also pacman: rust-analyzer)
-        "basedpyright",   -- uv tool install
-        "ruff",           -- uv tool install
+      ------------------------------------------------------------------------
+      -- Rust
+      ------------------------------------------------------------------------
+
+      -- rust-analyzer is resolved through PATH/rustup.
+      --
+      -- The workspace toolchain is expected to be on a current stable Rust
+      -- release, so rust-analyzer and the compiler stay aligned.
+      --
+      -- Required components:
+      --
+      --   rustup component add rust-analyzer rust-src
+      --
+      vim.lsp.config("rust_analyzer", {
+        cmd = {
+          "rust-analyzer",
+        },
+
+        settings = {
+          ["rust-analyzer"] = {
+            assist = {
+              -- The term-search quick fix panics during diagnostics in both
+              -- Rust 1.95 and 1.99 on etrading sources. Keep other diagnostics.
+              termSearch = { fuel = 0 },
+            },
+
+            ----------------------------------------------------------------
+            -- Cargo/project loading
+            ----------------------------------------------------------------
+
+            cargo = {
+              -- Avoid loading/checking tests, examples and benches unless
+              -- they are actually needed.
+              allTargets = false,
+
+              -- Give rust-analyzer its own Cargo target directory.
+              --
+              -- This intentionally trades extra disk usage for better
+              -- isolation and cache reuse. RA's Cargo processes do not fight
+              -- normal `cargo build`, `cargo test`, etc. over the same target
+              -- directory or build lock.
+              targetDir = true,
+            },
+
+            ----------------------------------------------------------------
+            -- Background compiler checking
+            ----------------------------------------------------------------
+
+            check = {
+              -- Avoid checking the entire Cargo workspace on every change.
+              --
+              -- Where possible, only the package containing the changed file
+              -- is checked.
+              workspace = false,
+
+              -- Do not pass --all-targets to background checks.
+              allTargets = false,
+            },
+
+            ----------------------------------------------------------------
+            -- Startup/cache behaviour
+            ----------------------------------------------------------------
+
+            cachePriming = {
+              -- Warm rust-analyzer's internal caches when the workspace opens.
+              --
+              -- Startup uses more CPU, but navigation, hover and completion
+              -- should be much faster once the initial warm-up is complete.
+              enable = true,
+
+              -- Use physical CPU cores for cache priming rather than every
+              -- logical thread.
+              numThreads = "physical",
+            },
+
+            ----------------------------------------------------------------
+            -- Stability
+            ----------------------------------------------------------------
+
+            completion = {
+              termSearch = {
+                -- Disable term search because this code path was involved in
+                -- the rust-analyzer worker panics seen on the older toolchain.
+                --
+                -- Normal completion, hover, goto-definition and references
+                -- still work.
+                enable = false,
+              },
+            },
+          },
+        },
       })
+
+      ------------------------------------------------------------------------
+      -- Enable language servers
+      ------------------------------------------------------------------------
+
+      -- Every name here is the normal nvim-lspconfig server name.
+      --
+      -- The binaries themselves are resolved through PATH/toolchain
+      -- management rather than downloaded by Mason.
+      vim.lsp.enable({
+        "clangd",
+        "lua_ls",
+        "rust_analyzer",
+        "basedpyright",
+        "ruff",
+      })
+
+      ------------------------------------------------------------------------
+      -- Diagnostics
+      ------------------------------------------------------------------------
 
       vim.diagnostic.config({
         virtual_text = {
           prefix = "-",
           spacing = 4,
         },
+
         underline = true,
+
+        -- Don't constantly redraw diagnostics while actively typing.
         update_in_insert = false,
+
         severity_sort = true,
       })
     end,
