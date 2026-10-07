@@ -1,14 +1,24 @@
 -- Comment added by Claude Code on 2026-08-05, continuing the IDE integration test series
 return {
-{
-    "folke/tokyonight.nvim",
+  { 'nvim-treesitter/nvim-treesitter', build = ':TSUpdate' },
+  {
+    "baliestri/aura-theme",
     lazy = false,
     priority = 1000,
-    opts = {},
-    config = function()
-        vim.cmd.colorscheme("tokyonight-night")
-    end,
-}
+    config = function(plugin)
+      vim.opt.rtp:append(plugin.dir .. "/packages/neovim")
+      vim.cmd([[colorscheme aura-dark]])
+    end
+  }
+-- {
+--     "folke/tokyonight.nvim",
+--     lazy = false,
+--     priority = 1000,
+--     opts = {},
+--     config = function()
+--         vim.cmd.colorscheme("tokyonight-night")
+--     end,
+-- }
 -- {
 --     "slugbyte/lackluster.nvim",
 --     lazy = false,
